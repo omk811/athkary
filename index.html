@@ -78,6 +78,15 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #d6a6
 }
 @media(orientation:landscape) and (max-height:500px){.hero{padding-block:14px}.tabs{position:relative}}
 @media(prefers-reduced-motion:reduce){.tabs{scroll-behavior:auto}}
+
+/* Desktop tab accessibility: show all sections without hidden horizontal scrolling */
+@media (min-width:721px){
+ .tabs{display:flex;flex-wrap:wrap;overflow:visible;scroll-snap-type:none;justify-content:stretch;gap:10px;align-items:stretch}
+ .tabs .tab{flex:1 1 185px;white-space:normal;min-height:52px;padding:10px 13px;text-align:center;scroll-snap-align:none}
+}
+@media (min-width:721px) and (max-width:900px){
+ .tabs .tab{flex-basis:170px}
+}
 </style></head><body>
 <header class="top"><div class="wrap"><div class="nav"><div class="brand">✦ <span>أذكاري</span></div><small>ورد يومي مستمد من القرآن والسنة وكتاب المختار</small></div><div class="hero"><div class="eyebrow">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div><h1>«ألا بذكر الله تطمئن القلوب»</h1><p>رافق يومك بذكر الله. اقرأ الدعاء، واضغط على عدّاده بعد كل تكرار، واطّلع على معناه ومصدره. لا يلزم تسجيل حساب، وتُحفظ المتابعة على جهازك.</p><div class="hero-footer"><span class="chip">✓ أذكار الصباح</span><span class="chip">✓ أذكار المساء</span><span class="chip">✓ أدعية عامة</span><span class="chip">✓ مراجع لكل ذكر</span><span class="chip">✓ أذكار النوم والصلاة</span></div></div></div></header>
 <main class="wrap content"><nav class="tabs" aria-label="أقسام الموقع"><button class="tab" data-tab="morning" aria-selected="true">☀ أذكار الصباح</button><button class="tab" data-tab="evening" aria-selected="false">☾ أذكار المساء</button><button class="tab" data-tab="general" aria-selected="false">♡ الأدعية العامة</button><button class="tab" data-tab="sleep" aria-selected="false">☽ أذكار النوم</button><button class="tab" data-tab="wake" aria-selected="false">☀ الاستيقاظ</button><button class="tab" data-tab="prayer" aria-selected="false">✦ بعد الصلاة</button><button class="tab" data-tab="occasions" aria-selected="false">⌂ أذكار المناسبات</button><button class="tab" data-tab="hardships" aria-selected="false">♡ أدعية الشدائد</button></nav><div class="toolbar"><div class="heading"><h2 id="section-title">أذكار الصباح</h2><p id="section-desc">يُفضّل قراءتها في أول النهار بعد الفجر.</p></div><div class="buttons"><button class="subtle" id="font-minus" aria-label="تصغير الخط">أ−</button><button class="subtle" id="font-plus" aria-label="تكبير الخط">أ+</button><button class="subtle" id="reset-all">إعادة عدادات القسم</button></div></div><input class="search" id="search" type="search" placeholder="ابحث عن دعاء أو كلمة أو مصدر..." aria-label="البحث في الأذكار"><div class="progress"><strong id="progress-text">0 من 0 مكتمل</strong><div class="bar" role="progressbar" aria-label="الإنجاز" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-bar"><div class="fill" id="progress-fill"></div></div></div><div class="cards" id="cards"></div></main>
