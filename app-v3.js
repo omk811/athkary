@@ -68,7 +68,7 @@ const fromJawami=ja.map(x=>({id:x.id,body:x.body,title:x.title,type:'dhikr',sour
 records=uniqueEntries(fromSource.concat(fromJawami));
 const jawamiCount=records.filter(x=>x.categories.includes('jawami')).length;
 if(jawamiCount!==50)throw Error('فهرس جوامع الدعاء غير مكتمل: '+jawamiCount);
-$('#total-count').textContent=records.length;
+const totalNode=$('#total-count');if(totalNode)totalNode.textContent=records.length;
 route();
 }catch(err){$('#categories').innerHTML='<p class="empty">تعذر تحميل الأذكار. يرجى تحديث الصفحة بعد اكتمال نشر الموقع.</p>';$('#loading-text').textContent=err.message||String(err)}
 }
