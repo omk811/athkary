@@ -25,9 +25,9 @@ const today=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+
 function storageKey(d){return 'azkary-v3:'+today()+':'+d.id}
 function number(d){try{return Math.max(0,Number(localStorage.getItem(storageKey(d)))||0)}catch{return 0}}
 function save(d,num){try{localStorage.setItem(storageKey(d),String(Math.max(0,num)))}catch{}renderCards()}
-function uniqueEntries(){
+function uniqueEntries(input){
 const map=new Map(),out=[];
-for(const r of records){
+for(const r of input){
 const k=norm(r.body);let p=k.length>25?map.get(k):null;
 if(p){for(const c of r.categories){if(!p.categories.includes(c))p.categories.push(c)}
 if(r.jawami){p.jawami=r.jawami;p.jawamiPage=r.jawamiPage;}
@@ -65,7 +65,7 @@ if(!a.ok||!b.ok)throw Error('تعذر تحميل بيانات الأذكار');
 const sa=(await a.json()).entries;const ja=(await b.json()).entries;
 const fromSource=sa.map(x=>({...x,categories:x.section==='daily'?['morning','evening']:[x.section],refs:[x.source]}));
 const fromJawami=ja.map(x=>({id:x.id,body:x.body,title:x.title,type:'dhikr',source:'«من جوامع دعاء النبي ﷺ» ص '+x.page,context:'',repeat:1,categories:['jawami'],jawami:{footnote:x.footnote},jawamiPage:x.page,refs:[x.footnote]}));
-records=uniqueEntries.call(null,fromSource.concat(fromJawami));
+records=uniqueEntries(fromSource.concat(fromJawami));
 const jawamiCount=records.filter(x=>x.categories.includes('jawami')).length;
 if(jawamiCount!==50)throw Error('فهرس جوامع الدعاء غير مكتمل: '+jawamiCount);
 $('#total-count').textContent=records.length;
