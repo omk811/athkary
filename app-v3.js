@@ -28,15 +28,16 @@ const today=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+
 function storageKey(d){return 'azkary-v3:'+today()+':'+d.id}
 function number(d){try{return Math.max(0,Number(localStorage.getItem(storageKey(d)))||0)}catch{return 0}}
 function save(d,num){try{localStorage.setItem(storageKey(d),String(Math.max(0,num)))}catch{}renderCards()}
-function uniqueEntries(input){
-const map=new Map(),out=[];
-for(const r of input){
-const k=norm(r.body);let p=k.length>25?map.get(k):null;
-if(p){for(const c of r.categories){if(!p.categories.includes(c))p.categories.push(c)}
-if(r.jawami){p.jawami=r.jawami;p.jawamiPage=r.jawamiPage;}
-p.refs=[...new Set([...(p.refs||[]),...(r.refs||[])])];
-}else{p={...r,categories:[...r.categories]};out.push(p);if(k.length>25)map.set(k,p)}
-}return out
+// Each original chapter is preserved in full, including authentic repeats between chapters.
+// Never merge records by wording: the same prayer can belong to different occasions
+// and must retain its own chapter title, evidence and repetition count.
+function retainSourceEntries(input){
+  const ids=new Set();
+  return input.map(entry=>{
+    if(ids.has(entry.id))throw Error('Repeated source identifier: '+entry.id);
+    ids.add(entry.id);
+    return {...entry,categories:[...entry.categories]};
+  });
 }
 function categoryItems(id){return records.filter(d=>d.categories.includes(id))}
 function pageData(){return active?categoryItems(active):[]}
@@ -98,10 +99,11 @@ const fromSource=sa.flatMap(ch=>ch.items.map((it,n)=>({
  refs:[it.reference],sourceBook:'حصن المسلم'
 })));
 const fromJawami=ja.map(x=>({id:x.id,body:x.body,title:x.title,type:'dhikr',source:'«من جوامع دعاء النبي ﷺ» ص '+x.page,context:'',repeat:1,categories:['jawami'],jawami:{footnote:x.footnote},jawamiPage:x.page,refs:[x.footnote]}));
-records=uniqueEntries(fromSource.concat(fromJawami));
+records=retainSourceEntries(fromSource.concat(fromJawami));
 const jawamiCount=records.filter(x=>x.categories.includes('jawami')).length;
 if(jawamiCount!==50)throw Error('فهرس جوامع الدعاء غير مكتمل: '+jawamiCount);
 if(sa.length!==133||fromSource.length!==302)throw Error('فهرس حصن المسلم غير مكتمل');
+if(records.length!==352)throw Error('مجموع مواد المصدرين غير مكتمل');
 const totalNode=$('#total-count');if(totalNode)totalNode.textContent=records.length;
 route();
 }catch(err){$('#categories').innerHTML='<p class="empty">تعذر تحميل الأذكار. يرجى تحديث الصفحة بعد اكتمال نشر الموقع.</p>';(()=>{const status=$('#loading-text');if(status)status.textContent=err.message||String(err)})()}
