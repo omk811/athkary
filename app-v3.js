@@ -3,6 +3,7 @@ const categories=[
 {id:'morning',name:'أذكار الصباح',icon:'☀',desc:'ابدأ يومك بذكر الله',base:'daily'},
 {id:'evening',name:'أذكار المساء',icon:'☾',desc:'أذكار آخر النهار',base:'daily'},
 {id:'jawami',name:'جوامع دعاء النبي ﷺ',icon:'✧',desc:'خمسون دعاءً مع الهوامش والتخريج'},
+{id:'sleep',name:'أذكار النوم',icon:'☽',desc:'أذكار ما قبل النوم والرؤيا والفزع'},
 {id:'wake',name:'أذكار الاستيقاظ',icon:'🌤',desc:'عند الاستيقاظ من النوم'},
 {id:'clothing',name:'أذكار اللباس',icon:'❀',desc:'عند لبس الثياب'},
 {id:'hygiene',name:'أذكار الطهارة',icon:'◈',desc:'الخلاء والوضوء'},
@@ -14,6 +15,8 @@ const categories=[
 {id:'social',name:'المجالس والآداب',icon:'♡',desc:'التهنئة والمجالس والآداب'},
 {id:'hajj',name:'الحج والعمرة',icon:'۞',desc:'أذكار المناسك'},
 {id:'travel',name:'السفر والركوب',icon:'✈',desc:'الخروج للسفر والعودة'},
+{id:'bereavement',name:'أذكار المصائب والتعزية',icon:'❧',desc:'التعزية والجنازة وزيارة القبور'},
+{id:'remembrance',name:'الاستغفار والتسبيح',icon:'✺',desc:'فضائل الذكر والتوبة والتسبيح'},
 {id:'nature',name:'المطر والرياح',icon:'☁',desc:'ما يقال في أحوال الطبيعة'},
 {id:'health',name:'المرض والعافية',icon:'✚',desc:'الدعاء للمريض'},
 {id:'hardships',name:'الشدائد والهموم',icon:'❥',desc:'دعوات الكرب والهم والمصيبة'}
@@ -60,7 +63,7 @@ $('#cards').innerHTML=filtered.map((d,i)=>{
 const isInstruction=d.type==='guidance';const n=number(d);
 const body=active==='evening'&&d.eveningBody?d.eveningBody:d.body;
 const footnote=active==='jawami'&&d.jawami?.footnote?'<div class="footnote"><strong>الهامش من الكتيب</strong><p>'+esc(d.jawami.footnote)+'</p><small>«من جوامع دعاء النبي ﷺ» — ص '+d.jawamiPage+'</small></div>':'';
-const src=active!=='jawami'?'<p class="ref"><b>التوثيق:</b> '+esc(d.source||'الأذكار اليومية من صحيح السنة النبوية')+'</p>':'';
+const src=active!=='jawami'?'<p class="ref"><b>المصدر:</b> '+esc(d.source||'حصن المسلم من أذكار الكتاب والسنة')+'</p>':'';
 const detail=usefulContext(d);
 const ctx=detail?'<details class="more"><summary>'+(isInstruction?'تفاصيل الإرشاد':'معلومات إضافية من المصدر')+'</summary><p>'+esc(detail)+'</p></details>':'';
 const counter=isInstruction?'':'<div class="count-controls"><span class="num" aria-label="عدد مرات قراءتك اليوم">'+n+'</span><button class="tap-plus" data-op="plus" data-id="'+d.id+'" aria-label="احتساب قراءة">قرأتُ الذكر +</button><button class="tap-reset" data-op="reset" data-id="'+d.id+'" aria-label="إعادة العداد">↺</button>'+(d.repeat>1?'<span class="target">العدد المذكور في المصدر: '+d.repeat+'</span>':'<span class="target">عدد للمتابعة فقط</span>')+'</div>';
@@ -70,14 +73,35 @@ $('#result-count').textContent=filtered.length+' مادة';
 }
 async function boot(){
 try{
-const [a,b]=await Promise.all([fetch('data/source.json',{cache:'no-store'}),fetch('data/jawami.json',{cache:'no-store'})]);
+const [a,b]=await Promise.all([fetch('data/hisn.json',{cache:'no-store'}),fetch('data/jawami.json',{cache:'no-store'})]);
 if(!a.ok||!b.ok)throw Error('تعذر تحميل بيانات الأذكار');
-const sa=(await a.json()).entries;const ja=(await b.json()).entries;
-const fromSource=sa.map(x=>({...x,categories:x.section==='daily'?['morning','evening']:(x.section==='morningOnly'?['morning']:[x.section]),refs:[x.source]}));
+const sa=(await a.json()).chapters;const ja=(await b.json()).entries;
+const sectionFor=n=>{
+ if(n===0)return 'wake';if(n<=4)return 'clothing';if(n<=8)return 'hygiene';if(n<=10)return 'home';if(n<=14)return 'mosque';
+ if(n<=25)return 'prayer';if(n===26)return 'morning';if(n===27)return 'evening';if(n<=31)return 'sleep';
+ if(n<=33)return 'prayer';if(n<=46)return 'hardships';if(n===47)return 'social';if(n<=51)return 'health';
+ if(n<=60)return 'bereavement';if(n<=67)return 'nature';if(n===68)return 'fasting';if(n<=72)return 'food';
+ if(n<=75)return 'fasting';if(n<=94)return 'social';if(n<=105)return 'travel';
+ if(n<=114)return 'social';if(n<=121)return 'hajj';if(n<=123)return 'social';
+ if(n<=126)return 'health';if(n===127)return 'food';if(n===128)return 'hardships';if(n<=131)return 'remembrance';return 'social';
+};
+const isInstruction=(text,n)=>{
+ const t=String(text||'').trim();
+ return n===50||n===107||n===131||n===132||
+ /^(?:عَنْ|عَنِ|عَن |قَالَ|قَالَتْ|كَانَ|كَانَتْ|يُقَالُ|يَقُولُ|يُسْتَحَبُّ|إِذَا كَانَ|مَنْ قَالَ|مَا مِنْ|يُصَلِّي)/.test(t)||
+ (t.length>220&&/^(?:إِذَا|إِنْ|مَنْ|وَكَانَ|وَيَقُولُ)/.test(t));
+};
+const fromSource=sa.flatMap(ch=>ch.items.map((it,n)=>({
+ id:it.id,title:ch.title,body:it.body,context:'',source:it.reference?'حصن المسلم — '+it.reference:'حصن المسلم',
+ repeat:Number(it.count)||1,type:isInstruction(it.body,ch.chapter)?'guidance':'dhikr',
+ section:sectionFor(ch.chapter),categories:[sectionFor(ch.chapter)],chapter:ch.chapter,
+ refs:[it.reference],sourceBook:'حصن المسلم'
+})));
 const fromJawami=ja.map(x=>({id:x.id,body:x.body,title:x.title,type:'dhikr',source:'«من جوامع دعاء النبي ﷺ» ص '+x.page,context:'',repeat:1,categories:['jawami'],jawami:{footnote:x.footnote},jawamiPage:x.page,refs:[x.footnote]}));
 records=uniqueEntries(fromSource.concat(fromJawami));
 const jawamiCount=records.filter(x=>x.categories.includes('jawami')).length;
 if(jawamiCount!==50)throw Error('فهرس جوامع الدعاء غير مكتمل: '+jawamiCount);
+if(sa.length!==133||fromSource.length!==302)throw Error('فهرس حصن المسلم غير مكتمل');
 const totalNode=$('#total-count');if(totalNode)totalNode.textContent=records.length;
 route();
 }catch(err){$('#categories').innerHTML='<p class="empty">تعذر تحميل الأذكار. يرجى تحديث الصفحة بعد اكتمال نشر الموقع.</p>';(()=>{const status=$('#loading-text');if(status)status.textContent=err.message||String(err)})()}
