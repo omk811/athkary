@@ -40,6 +40,15 @@ function pageData(){return active?categoryItems(active):[]}
 function goto(category){window.location.hash=category?'section-'+category:'';route()}
 function route(){const h=decodeURIComponent(window.location.hash.slice(1));const id=h.startsWith('section-')?h.slice(8):null;active=categories.some(c=>c.id===id)?id:null;$('#home').hidden=!!active;$('#detail').hidden=!active;query='';$('#filter').value='';if(active){const c=categories.find(x=>x.id===active);$('#category-title').textContent=c.name;$('#category-description').textContent=c.desc;renderCards()}else renderHome();window.scrollTo({top:0,behavior:'instant'})}
 function renderHome(){$('#categories').innerHTML=categories.map(c=>{const n=categoryItems(c.id).filter(x=>x.type!=='guidance').length;return '<button type="button" class="category-card" data-category="'+c.id+'"><span class="category-ico" aria-hidden="true">'+c.icon+'</span><span class="category-title">'+esc(c.name)+'</span><span class="category-desc">'+esc(c.desc)+'</span><span class="category-foot"><span>'+n+' '+(n===1?'ذكر':'مادة')+'</span><span>تصفح ←</span></span></button>'}).join('')}
+function usefulContext(d){
+const raw=String(d.context||'').trim();
+if(!raw)return '';
+const clean=raw.replace(/^[\s،؛.\-–]+|[\s،؛.\-–]+$/g,'').trim();
+if(!clean)return '';
+// Mere attribution or repetition count already appears in the citation and counter.
+const informational=clean.replace(/(?:صحيح|حسن)(?:\s+بمجموع\s+طرقه)?\s*[؛،]?/g,'').replace(/(?:رواه|روى|رواهما|متفق عليه)\s*(?:البخاري|مسلم|الترمذي|أبو داود|أحمد|النسائي|ابن ماجه|الحاكم|الطبراني|عبد بن حميد)(?:\s*[،و]\s*(?:مسلم|البخاري))?/g,'').replace(/(?:ثلاث|ثلاثًا|ثلاثا|أربع|أربعًا|أربعا|سبع|سبعًا|سبعا|مائة|مئة|ثلاث\s*وثلاثين)\s+مر(?:ة|ات)/g,'').replace(/[\s،؛.\-–:]+/g,'').trim();
+return informational.length>=12?clean:'';
+}
 function renderCards(){
 if(!active)return;
 const all=pageData();const terms=query.trim();const filtered=all.filter(d=>(showGuidance||d.type!=='guidance')&&(!terms||[d.title,d.body,d.context,d.source,d.jawami?.footnote||''].join(' ').includes(terms)));
@@ -52,7 +61,8 @@ const isInstruction=d.type==='guidance';const n=number(d);
 const body=active==='evening'&&d.eveningBody?d.eveningBody:d.body;
 const footnote=active==='jawami'&&d.jawami?.footnote?'<div class="footnote"><strong>الهامش من الكتيب</strong><p>'+esc(d.jawami.footnote)+'</p><small>«من جوامع دعاء النبي ﷺ» — ص '+d.jawamiPage+'</small></div>':'';
 const src=active!=='jawami'?'<p class="ref"><b>التوثيق:</b> '+esc(d.source||'الأذكار اليومية من صحيح السنة النبوية')+'</p>':'';
-const ctx=d.context?.trim()?'<details class="more"><summary>'+(isInstruction?'التوثيق والتفصيل':'فضل الذكر والتفصيل الوارد في المصدر')+'</summary><p>'+esc(d.context)+'</p></details>':'';
+const detail=usefulContext(d);
+const ctx=detail?'<details class="more"><summary>'+(isInstruction?'تفاصيل الإرشاد':'معلومات إضافية من المصدر')+'</summary><p>'+esc(detail)+'</p></details>':'';
 const counter=isInstruction?'':'<div class="count-controls"><span class="num" aria-label="عدد مرات قراءتك اليوم">'+n+'</span><button class="tap-plus" data-op="plus" data-id="'+d.id+'" aria-label="احتساب قراءة">قرأتُ الذكر +</button><button class="tap-reset" data-op="reset" data-id="'+d.id+'" aria-label="إعادة العداد">↺</button>'+(d.repeat>1?'<span class="target">العدد المذكور في المصدر: '+d.repeat+'</span>':'<span class="target">عدد للمتابعة فقط</span>')+'</div>';
 return '<article class="prayer-card'+(isInstruction?' guidance-card':'')+'" data-record="'+d.id+'"><div class="card-head"><span class="index">'+(i+1)+'</span><h3>'+esc(d.title)+'</h3><span class="type">'+(isInstruction?'إرشاد':'ذكر مأثور')+'</span></div><p class="prayer-body" style="font-size:calc(var(--prayer-size) * '+size+')" dir="rtl">'+esc(body)+'</p>'+ctx+src+footnote+counter+'</article>'
 }).join('')||'<p class="empty">لم أجد نتائج مطابقة. جرّب كلمة أخرى.</p>';
