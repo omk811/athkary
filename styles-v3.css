@@ -4,3 +4,7 @@
 @media(max-width:980px){.categories{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:690px){.wrap{width:calc(100% - 24px)}.nav small{display:none}.hero{padding:28px 0 35px}.hero h1{font-size:36px}.hero p{font-size:14px}.categories{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.category-card{padding:15px;min-height:172px;border-radius:17px;gap:7px}.category-ico{width:42px;height:42px;font-size:22px}.category-title{font-size:16px}.category-desc{font-size:12px}.prayer-card{padding:18px 17px;border-radius:17px}.card-head{gap:9px}.card-head h3{font-size:16px}.type{font-size:10px}.prayer-body{line-height:1.92}.toolbar input{min-width:100%}.intro h2{font-size:23px}.progress-track{max-width:110px}}@media(max-width:365px){.categories{grid-template-columns:1fr}.category-card{min-height:140px}.card-head{flex-wrap:wrap}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;scroll-behavior:auto!important}}
+/* Distinct presentation for contextual guidance, never as a supplication */
+.guidance-card{border-style:dashed;background:#f5f7f3;box-shadow:none}
+.guidance-card .prayer-body{font-family:Tajawal,system-ui,sans-serif;font-size:16px!important;line-height:1.85;color:#506a5a}
+.guidance-card .type{background:#e2e9de;color:#506a5a}
