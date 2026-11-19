@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#194735">
+<meta name="application-name" content="أذكاري">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="أذكاري">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png">
 <meta name="description" content="موقع أذكاري: أذكار اليوم والليلة من صحيح السنة النبوية، وجوامع دعاء النبي ﷺ كاملة بالنص والهامش، بتصنيف واضح وعداد تفاعلي.">
 <title>أذكاري | الأذكار اليومية وجوامع دعاء النبي ﷺ</title>
 <link rel="stylesheet" href="styles-v3.css">
@@ -12,6 +20,8 @@
 <header class="top"><div class="wrap">
 <nav class="nav" aria-label="رأس الموقع"><div class="brand">✦ أذكاري <span>✦</span></div><small>نصوص مأثورة مرتبة بحسب المناسبة</small></nav>
 <div class="hero"><div class="eyebrow">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div><h1>أذكارٌ تَطمئنُ بها القلوب</h1><p>أذكار كتاب «حصن المسلم» كاملة في بطاقات نصية عربية مرتبة بحسب المناسبة، مع التوثيق وعداد القراءة، وقسم مستقل يضم خمسين دعاءً من «جوامع دعاء النبي ﷺ» مع هوامشها.</p>
+<div class="install-area"><button type="button" id="install-app" class="install-app"><span aria-hidden="true">↓</span> تثبيت أذكاري كتطبيق</button><span class="install-note">أضفه إلى الشاشة الرئيسية للقراءة السريعة ودون اتصال بعد التحميل الأول.</span></div>
+<div id="install-help" class="install-help" hidden role="status"><p id="install-help-text"></p><button type="button" id="install-help-close">إغلاق</button></div>
 <div class="summary-chips"><span>١٣٣ بابًا من حصن المسلم</span><span>٣٠٢ مادة نصية</span><span>٥٠ دعاءً جامعًا</span><span>عداد متابعة شخصي</span><span>دعم الحاسوب والهاتف</span></div></div>
 </div></header>
 <main class="wrap content">
@@ -26,5 +36,6 @@
 </main>
 <footer class="footer"><div class="wrap"><strong>أذكاري | صدقة علمية متاحة للجميع</strong><small>إعداد وتطوير: الأستاذ خليل البلوشي</small><small>المرجع الأساسي: حصن المسلم من أذكار الكتاب والسنة — سعيد بن علي بن وهف القحطاني. وجوامع دعاء النبي ﷺ بمرجعه المستقل.</small><small>البيانات العربية: HisnElMuslim — Abdellah Sellam (MIT). <a style="color:#e5ce9b" href="https://github.com/asellam/HisnElMuslim" target="_blank" rel="noopener noreferrer">نسبة البيانات وترخيصها</a></small></div></footer>
 <script src="app-v3.js" defer></script>
+<script src="pwa-install.js" defer></script>
 </body>
 </html>
