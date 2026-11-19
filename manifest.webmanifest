@@ -1,0 +1,36 @@
+{
+  "id": "/athkary/",
+  "name": "أذكاري | أذكار الكتاب والسنة",
+  "short_name": "أذكاري",
+  "description": "أذكار حصن المسلم وجوامع دعاء النبي ﷺ، مع التصنيف والعداد والقراءة دون اتصال.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/athkary/",
+  "scope": "/athkary/",
+  "display": "standalone",
+  "display_override": [
+    "standalone"
+  ],
+  "background_color": "#fcfaf4",
+  "theme_color": "#194735",
+  "orientation": "any",
+  "categories": [
+    "books",
+    "lifestyle",
+    "education"
+  ],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
