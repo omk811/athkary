@@ -8,3 +8,15 @@
 .guidance-card{border-style:dashed;background:#f5f7f3;box-shadow:none}
 .guidance-card .prayer-body{font-family:Tajawal,system-ui,sans-serif;font-size:16px!important;line-height:1.85;color:#506a5a}
 .guidance-card .type{background:#e2e9de;color:#506a5a}
+
+
+/* Installable PWA controls: responsive, touch friendly, and not shown after installation. */
+.install-area{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:20px}
+.install-app{background:#f5e9c7;color:#194735;font-size:15px;font-weight:800;padding:11px 20px;min-height:48px;border:1px solid #e5cc8d;border-radius:14px;box-shadow:0 3px 10px #00000019}
+.install-app:hover{background:#fff3d2}
+.install-app[hidden]{display:none!important}
+.install-note{color:#d7e6de;font-size:12px;max-width:380px}
+.install-help{margin-top:12px;padding:14px 16px;background:#fff;color:#254737;border-radius:13px;border:1px solid #d9e6da;max-width:780px}
+.install-help p{margin:0 0 10px;font-size:14px;line-height:1.9}
+.install-help button{background:#194735;border:0;color:#fff;border-radius:9px;padding:7px 18px;min-height:40px}
+@media(max-width:690px){.install-area{gap:9px;align-items:flex-start;flex-direction:column}.install-app{width:100%;min-height:52px}.install-note{font-size:12px}}
